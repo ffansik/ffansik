@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ffansik — контакты</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto;
+      border: 3px solid #fff;
+      background: url('assets/avatar.png') center/cover;
+    }
+
+    h1 { text-align: center; margin: 0; font-size: 2em; }
+    p { text-align: center; color: #ccc; margin: 5px 0 20px 0; }
+
+    .socials {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .link-btn {
+      border: 1px solid #fff;
+      padding: 12px 18px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #fff;
+      font-size: 16px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .link-btn:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    .phone-copy, .email-copy {
+      border: 1px solid #fff;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 16px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .form-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      cursor: text;
+    }
+
+    button {
+      padding: 12px;
+      border-radius: 10px;
+      background: #fff;
+      color: #000;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #ccc;
+      color: #000;
+    }
+
+    canvas#particles {
+      position: fixed;
+      top:0; left:0; width:100%; height:100%; z-index:-1;
+    }
+
+  </style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="container">
+  <div class="avatar"></div>
+  <h1>ffansik</h1>
+  <p>Все социальные сети и связь напрямую</p>
+  <div class="socials">
+    <a class="link-btn" href="https://www.tiktok.com/@ffansik" target="_blank">TikTok</a>
+    <a class="link-btn" href="https://t.me/ffansik" target="_blank">Telegram</a>
+    <a class="link-btn" href="https://t.me/fffansik" target="_blank">Группа</a>
+    <a class="link-btn" href="https://vk.com/fans.taibov" target="_blank">VK</a>
+    <a class="link-btn" href="https://www.instagram.com/fffansik/" target="_blank">Instagram</a>
+    <a class="link-btn" href="https://open.spotify.com/playlist/6xdvMsmipvteVYdeMuTJdL?si=ptPh9g2JRKSPkIV6O1y5VA&pi=aujqdQ3rR1KFc" target="_blank">Spotify</a>
+    <a class="link-btn" href="https://www.donationalerts.com/r/ffansik" target="_blank">Donationalerts</a>
+    <a class="link-btn" href="https://wa.me/77073423793" target="_blank">WhatsApp</a>
+    <div class="email-copy" onclick="copyEmail()">✉️ mastertoibov@gmail.com</div>
+  </div>
+
+  <div class="phone-copy" onclick="copyPhone()">📞 +77073423793</div>
+
+  <div class="form-box">
+    <input id="name" placeholder="Ваше имя" />
+    <textarea id="msg" placeholder="Сообщение" rows="4"></textarea>
+    <button onclick="sendMessage()">Отправить</button>
+  </div>
+</div>
+
+<script>
+function copyPhone(){
+  navigator.clipboard.writeText('+77073423793');
+}
+function copyEmail(){
+  navigator.clipboard.writeText('mastertoibov@gmail.com');
+  alert('Email скопирован!');
+}
+
+// Частицы
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let w = canvas.width = window.innerWidth;
+let h = canvas.height = window.innerHeight;
+let particles = [];
+for(let i=0;i<100;i++){
+  particles.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+1,dx:(Math.random()-0.5)*1,dy:(Math.random()-0.5)*1});
+}
+function animate(){
+  ctx.clearRect(0,0,w,h);
+  for(let p of particles){
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle='#fff';
+    ctx.fill();
+    p.x+=p.dx; p.y+=p.dy;
+    if(p.x<0||p.x>w)p.dx*=-1;
+    if(p.y<0||p.y>h)p.dy*=-1;
+  }
+  requestAnimationFrame(animate);
+}
+animate();
+window.addEventListener('resize',()=>{w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;});
+
+// Отправка сообщений через Telegram API
+function sendMessage(){
+  const name = document.getElementById('name').value;
+  const msg = document.getElementById('msg').value;
+  const text = `Новое сообщение с сайта:%0AИмя: ${name}%0AТекст: ${msg}`;
+  const token = "8441926944:AAGG_XVa_c-yWGgW37nnhhm18JzRSQFz-AM";
+  const chat_id = "983627004";
+  fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${text}`)
+    .then(()=>{alert('Отправлено!');document.getElementById('name').value='';document.getElementById('msg').value='';})
+    .catch(()=>alert('Ошибка отправки'));
+}
+</script>
+
+</body>
+</html>
